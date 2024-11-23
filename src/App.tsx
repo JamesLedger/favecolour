@@ -2,26 +2,65 @@ import React, { useState } from "react";
 import "./App.css";
 
 // Function to generate a list of hex colors
-const generateHexColors = () => {
+const generateHSLColors = () => {
   const colors = [];
-  // Generate all possible colors (0x000000 to 0xFFFFFF)
-  for (let i = 0; i <= 0xffffff; i++) {
-    const color = `#${i.toString(16).padStart(6, "0")}`;
-    colors.push(color);
+  // Generate colors with evenly distributed hue, saturation, and lightness
+  for (let h = 0; h < 360; h += 5) {
+    // hue: 0-360
+    for (let s = 20; s <= 100; s += 20) {
+      // saturation: 20-100
+      for (let l = 20; l <= 80; l += 20) {
+        // lightness: 20-80
+        colors.push(`hsl(${h}, ${s}%, ${l}%)`);
+      }
+    }
   }
   return colors;
 };
 
-// Function to calculate contrast ratio with white text
-const getContrastRatio = (hexColor: string) => {
-  const r = parseInt(hexColor.slice(1, 3), 16);
-  const g = parseInt(hexColor.slice(3, 5), 16);
-  const b = parseInt(hexColor.slice(5, 7), 16);
-  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  return luminance > 0.5 ? "#000000" : "#ffffff";
+const hslToHex = (hslColor: string) => {
+  // Extract h,s,l from the hsl string
+  const [h, s, l] = hslColor
+    .match(/\d+/g)!
+    .map((n, i) => (i === 0 ? Number(n) : Number(n) / 100));
+
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = l - c / 2;
+  let r = 0,
+    g = 0,
+    b = 0;
+
+  if (0 <= h && h < 60) {
+    [r, g, b] = [c, x, 0];
+  } else if (60 <= h && h < 120) {
+    [r, g, b] = [x, c, 0];
+  } else if (120 <= h && h < 180) {
+    [r, g, b] = [0, c, x];
+  } else if (180 <= h && h < 240) {
+    [r, g, b] = [0, x, c];
+  } else if (240 <= h && h < 300) {
+    [r, g, b] = [x, 0, c];
+  } else if (300 <= h && h < 360) {
+    [r, g, b] = [c, 0, x];
+  }
+
+  const toHex = (n: number) => {
+    const hex = Math.round((n + m) * 255).toString(16);
+    return hex.length === 1 ? "0" + hex : hex;
+  };
+
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 };
 
-const colors = generateHexColors();
+// Function to calculate contrast ratio with white text
+const getContrastRatio = (hslColor: string) => {
+  // Extract lightness value from HSL string
+  const l = parseInt(hslColor.split(",")[2].replace("%)", ""));
+  return l > 50 ? "#000000" : "#ffffff";
+};
+
+const colors = generateHSLColors();
 
 function App() {
   const [left, setLeft] = useState(0);
@@ -39,6 +78,10 @@ function App() {
   };
 
   const handleKeyPress = (event: KeyboardEvent) => {
+    if (event.key === "ArrowUp") {
+      handleReset();
+      return;
+    }
     if (left === right) return;
     if (event.key === "ArrowLeft") {
       handleChoice("left");
@@ -74,12 +117,19 @@ function App() {
         }}
         role="alert"
       >
-        <h2>Your favorite color is {colors[left]}!</h2>
+        <h2>Your favorite color is:</h2>
+        <p style={{ fontSize: "2rem", margin: "1rem 0" }}>{colors[left]}</p>
+        <p style={{ fontSize: "2.5rem", fontWeight: "bold", margin: "1rem 0" }}>
+          {hslToHex(colors[left])}
+        </p>
         <button
           onClick={handleReset}
           style={{
             backgroundColor: getContrastRatio(colors[left]),
             color: colors[left],
+            fontSize: "1.2rem",
+            padding: "0.8rem 1.5rem",
+            marginTop: "2rem",
           }}
         >
           Start Over
@@ -107,6 +157,7 @@ function App() {
           <p>Choose between two colors by clicking or using arrow keys.</p>
           <p>← Left arrow for left color</p>
           <p>→ Right arrow for right color</p>
+          <p>↑ Up arrow to reset</p>
         </div>
       )}
       <div className="app-container">
