@@ -181,15 +181,15 @@ function App() {
           <div
             className="color-option"
             style={{
-              backgroundColor: colors[mid], // Changed from mid + 1 to mid
-              color: getContrastRatio(colors[mid]),
+              backgroundColor: colors[mid + 1], // Changed from mid to mid + 1
+              color: getContrastRatio(colors[mid + 1]), // Changed from mid to mid + 1
             }}
             onClick={() => handleChoice("right")}
             role="button"
             tabIndex={0}
-            aria-label={`Select right color: ${colors[mid]}`}
+            aria-label={`Select right color: ${colors[mid + 1]}`} // Changed from mid to mid + 1
           >
-            {colors[mid]} {/* Changed from mid + 1 to mid */}
+            {colors[mid + 1]} {/* Changed from mid to mid + 1 */}
           </div>
         </div>
       </div>
