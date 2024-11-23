@@ -37,21 +37,59 @@ body, html {
 
 .color-option {
   flex: 1;
-  height: 100%; /* Ensure it fills the container height */
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  font-size: 2.5rem; /* Increased from default */
+  font-weight: bold; /* Make it bolder */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Optional: adds subtle shadow for better readability */
+}
+
+.favorite-color-screen h2 {
+  font-size: 3rem; /* Make the final color selection even larger */
+}
+
+.progress-bar {
+  position: absolute;
+  right: 20px;
+  font-size: 0.9em;
+  color: #fff;
+}
+
+.instructions {
+  position: fixed;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 1000;
+  color: white;
 }
 
 .favorite-color-screen {
-  width: 100vw; /* Ensure it fills the viewport width */
-  height: 100vh; /* Ensure it fills the viewport height */
+  height: 100vh;
+  width: 100vw;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: #fff;
-  font-size: 2rem;
   text-align: center;
-  overflow: hidden; /* Prevent any scrolling */
+}
+
+.color-option:focus {
+  outline: 3px solid #fff;
+  outline-offset: -3px;
+}
+
+button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1em;
+  margin-top: 20px;
 }
