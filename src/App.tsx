@@ -101,7 +101,7 @@ function App() {
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [left, right]);
+  }, [left, right, handleChoice, handleReset]);
 
   const progress = Math.round(
     ((colors.length - (right - left)) / colors.length) * 100
@@ -143,7 +143,10 @@ function App() {
   return (
     <>
       <div className="app-header">
-        <h1>Figure out your favorite color</h1>
+        <h1>
+          Even if they don't know what it is, everyone has a favorite colour.
+          Figure out yours here
+        </h1>
         <div
           className="progress-bar"
           role="progressbar"
