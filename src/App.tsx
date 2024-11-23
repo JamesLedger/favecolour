@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import "./App.css";
 
 // Function to generate a list of hex colors
-const generateHexColors = (numColors: number) => {
+const generateHexColors = () => {
   const colors = [];
-  for (let i = 0; i < numColors; i++) {
-    const color = `#${Math.floor(Math.random() * 16777215)
-      .toString(16)
-      .padStart(6, "0")}`;
+  // Generate all possible colors (0x000000 to 0xFFFFFF)
+  for (let i = 0; i <= 0xffffff; i++) {
+    const color = `#${i.toString(16).padStart(6, "0")}`;
     colors.push(color);
   }
   return colors;
@@ -22,7 +21,7 @@ const getContrastRatio = (hexColor: string) => {
   return luminance > 0.5 ? "#000000" : "#ffffff";
 };
 
-const colors = generateHexColors(1000);
+const colors = generateHexColors();
 
 function App() {
   const [left, setLeft] = useState(0);
@@ -128,15 +127,15 @@ function App() {
           <div
             className="color-option"
             style={{
-              backgroundColor: colors[mid + 1],
-              color: getContrastRatio(colors[mid + 1]),
+              backgroundColor: colors[mid], // Changed from mid + 1 to mid
+              color: getContrastRatio(colors[mid]),
             }}
             onClick={() => handleChoice("right")}
             role="button"
             tabIndex={0}
-            aria-label={`Select right color: ${colors[mid + 1]}`}
+            aria-label={`Select right color: ${colors[mid]}`}
           >
-            {colors[mid + 1]}
+            {colors[mid]} {/* Changed from mid + 1 to mid */}
           </div>
         </div>
       </div>
