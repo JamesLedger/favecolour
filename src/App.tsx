@@ -1,21 +1,54 @@
 import React, { useState } from "react";
 import "./App.css";
 
-// Function to generate a list of hex colors
 const generateHSLColors = () => {
-  const colors = [];
-  // Generate colors with evenly distributed hue, saturation, and lightness
+  // Popular color ranges based on color psychology and preference studies
+  const popularHues = [
+    { start: 200, end: 240, weight: 2 }, // Blues (most common favorite)
+    { start: 0, end: 15, weight: 1.5 }, // Reds
+    { start: 270, end: 290, weight: 1.5 }, // Purples
+    { start: 120, end: 150, weight: 1 }, // Greens
+  ];
+
+  const baseColors = [];
+  // Generate colors with perceptually uniform steps
   for (let h = 0; h < 360; h += 5) {
-    // hue: 0-360
-    for (let s = 20; s <= 100; s += 20) {
-      // saturation: 20-100
-      for (let l = 20; l <= 80; l += 20) {
-        // lightness: 20-80
-        colors.push(`hsl(${h}, ${s}%, ${l}%)`);
+    // Reduced step size for more precision
+    const hueWeight =
+      popularHues.find((range) => h >= range.start && h <= range.end)?.weight ||
+      1;
+
+    for (let s = 75; s <= 95; s += 10) {
+      // Adjusted saturation range
+      for (let l = 45; l <= 65; l += 10) {
+        // Adjusted lightness range
+        // Repeat popular colors based on weight
+        const repeats = Math.round(hueWeight);
+        for (let i = 0; i < repeats; i++) {
+          baseColors.push(`hsl(${h}, ${s}%, ${l}%)`);
+        }
       }
     }
   }
-  return colors;
+
+  return baseColors.sort((a, b) => {
+    const [h1, s1, l1] = a.match(/\d+/g)!.map((n) => parseInt(n));
+    const [h2, s2, l2] = b.match(/\d+/g)!.map((n) => parseInt(n));
+
+    const weight1 =
+      popularHues.find((range) => h1 >= range.start && h1 <= range.end)
+        ?.weight || 1;
+    const weight2 =
+      popularHues.find((range) => h2 >= range.start && h2 <= range.end)
+        ?.weight || 1;
+
+    if (weight1 !== weight2) return weight2 - weight1;
+
+    // Perceptual attributes
+    if (Math.abs(h1 - h2) > 30) return h1 - h2;
+    if (s1 !== s2) return s2 - s1; // Prefer more saturated
+    return l2 - l1; // Prefer brighter
+  });
 };
 
 const hslToHex = (hslColor: string) => {
@@ -181,15 +214,15 @@ function App() {
           <div
             className="color-option"
             style={{
-              backgroundColor: colors[mid + 1], // Changed from mid to mid + 1
-              color: getContrastRatio(colors[mid + 1]), // Changed from mid to mid + 1
+              backgroundColor: colors[mid + 1],
+              color: getContrastRatio(colors[mid + 1]),
             }}
             onClick={() => handleChoice("right")}
             role="button"
             tabIndex={0}
-            aria-label={`Select right color: ${colors[mid + 1]}`} // Changed from mid to mid + 1
+            aria-label={`Select right color: ${colors[mid + 1]}`}
           >
-            {colors[mid + 1]} {/* Changed from mid to mid + 1 */}
+            {colors[mid + 1]}
           </div>
         </div>
       </div>
