@@ -1,42 +1,57 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevent scrolling */
+  width: 100%;
+  height: 100%;
+}
+
+.app-header {
+  width: 100%;
+  height: 60px; /* Adjust height as needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #242424; /* Adjust background color as needed */
+  color: #fff;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+}
+
+.app-container {
+  height: calc(100vh - 60px); /* Subtract header height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
+  margin-top: 60px; /* Add margin to account for fixed header */
+  overflow: hidden; /* Prevent scrolling within the container */
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.color-container {
+  display: flex;
+  width: 100vw; /* Ensure it fills the viewport width */
+  height: 100%; /* Fill the remaining height */
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.color-option {
+  flex: 1;
+  height: 100%; /* Ensure it fills the container height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+.favorite-color-screen {
+  width: 100vw; /* Ensure it fills the viewport width */
+  height: 100vh; /* Ensure it fills the viewport height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 2rem;
+  text-align: center;
+  overflow: hidden; /* Prevent any scrolling */
 }
